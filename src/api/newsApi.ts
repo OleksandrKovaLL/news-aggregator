@@ -42,7 +42,7 @@ const newsApiClient = axios.create({
 // }
 
 export const newsApi = {
-  getEverything: async (params?: {
+  getAll: async (params?: {
     sources?: string
     q?: string
     sortBy?: 'publishedAt' | 'relevancy' | 'popularity'
