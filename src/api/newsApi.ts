@@ -1,8 +1,21 @@
 import axios from 'axios'
 import type { NewsResponse } from '@/types'
 
+// const newsApiClient = axios.create({
+//   baseURL: import.meta.env.VITE_NEWS_API_BASE_URL,
+//   params: {
+//     apiKey: import.meta.env.VITE_NEWS_API_KEY,
+//   },
+// })
+
+// Для production використовуємо CORS proxy
+const isDevelopment = import.meta.env.DEV
+const baseURL = isDevelopment
+  ? import.meta.env.VITE_NEWS_API_BASE_URL
+  : 'https://corsproxy.io/?' + import.meta.env.VITE_NEWS_API_BASE_URL
+
 const newsApiClient = axios.create({
-  baseURL: import.meta.env.VITE_NEWS_API_BASE_URL,
+  baseURL,
   params: {
     apiKey: import.meta.env.VITE_NEWS_API_KEY,
   },
