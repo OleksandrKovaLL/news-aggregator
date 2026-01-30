@@ -5,6 +5,6 @@ export const useCMSConfig = () => {
   return useQuery({
     queryKey: ['cms-config'],
     queryFn: () => sanityApi.getConfig(),
-    staleTime: 1000 * 60 * 10, // 10 хвилин (конфіг рідко змінюється)
+    staleTime: 1000 * 60 * 10, // 10 min
   })
 }

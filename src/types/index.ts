@@ -48,6 +48,6 @@ export interface EnhancedArticle extends NewsArticle {
 export interface NewsFilters {
     source?: string
     keyword?: string
-    sortBy: 'publishedAt' | 'relevancy'
+    // sortBy: 'publishedAt' | 'relevancy'
     sortOrder: 'asc' | 'desc'
 }

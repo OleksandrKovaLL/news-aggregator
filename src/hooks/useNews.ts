@@ -10,35 +10,47 @@ export const useNews = (filters: NewsFilters) => {
   return useQuery({
     queryKey: ['news', filters],
     queryFn: async () => {
-      // Формуємо список дозволених джерел
-      const sources = config?.allowedSources
-        .map(s => s.sourceId)
-        .join(',')
+      // Create a list of allowed sources
+      const sources = config?.allowedSources.map((s) => s.sourceId).join(',')
 
-      // Робимо запит до News API
+      //News API request
       const response = await newsApi.getAll({
         sources: filters.source || sources,
-        q: filters.keyword,
         pageSize: 50,
         sortBy: 'publishedAt',
       })
 
-      // Фільтруємо тільки дозволені джерела
-      const allowedSourceIds = config?.allowedSources.map(s => s.sourceId) || []
-      const filteredArticles = response.articles.filter(
-        article =>
-          article.source.id &&
-          allowedSourceIds.includes(article.source.id)
+      // Filtering only allowed sources
+      const allowedSourceIds =
+        config?.allowedSources.map((s) => s.sourceId) || []
+      let filteredArticles = response.articles.filter(
+        (article) =>
+          article.source.id && allowedSourceIds.includes(article.source.id)
       )
 
-      // Додаємо топіки до статей
+      // Filtering by keyword in Title
+      if (filters.keyword && filters.keyword.trim()) {
+        const keywordLower = filters.keyword.toLowerCase().trim()
+        filteredArticles = filteredArticles.filter((article) =>
+          article.title.toLowerCase().includes(keywordLower)
+        )
+      }
+
+      // Add topics to articles
       const enhancedArticles = enhanceArticlesWithTopics(
         filteredArticles,
         config?.topics || []
       )
 
-      return enhancedArticles
+      const sortedArticles = enhancedArticles.toSorted((a, b) => {
+        const dateA = new Date(a.publishedAt).getTime()
+        const dateB = new Date(b.publishedAt).getTime()
+        return filters.sortOrder === 'desc' ? dateB - dateA : dateA - dateB
+      })
+
+      return sortedArticles
     },
-    enabled: !!config, // Запускаємо тільки коли є конфіг з CMS
+
+    enabled: !!config, // CMS config
   })
 }
