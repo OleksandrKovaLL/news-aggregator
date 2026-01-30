@@ -1,73 +1,90 @@
-# React + TypeScript + Vite
+# News Aggregator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern news aggregation application built with React, TypeScript, and Sanity CMS. This project demonstrates clean architecture, proper state management, and dynamic content filtering based on CMS configuration.
 
-Currently, two official plugins are available:
+## 🚀 Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Application**: [https://news-aggregator-alpha-six.vercel.app](https://news-aggregator-alpha-six.vercel.app)
 
-## React Compiler
+## 🛠️ Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Frontend
+- **React 18** - UI library
+- **TypeScript** - Type safety
+- **Vite** - Build tool and dev server
+- **TanStack Query (React Query)** - Data fetching and caching
+- **TailwindCSS v4** - Styling
+- **shadcn/ui** - UI components
+- **React Router** - Navigation (ready for expansion)
 
-## Expanding the ESLint configuration
+## 📋 Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Core Functionality
+- **News Feed**: Display articles from multiple trusted sources
+- **Dynamic Filtering**: 
+  - Filter by news source
+  - Search by keyword in article titles
+  - Sort by publication date (newest/oldest first)
+- **Topic Classification**: Automatically categorize articles based on CMS-defined keywords
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+- **Article Details**: Click on any article to view full details in a modal
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### CMS Integration
+- **Dynamic Configuration**: All sources and topics are managed through Sanity CMS
+- **Real-time Updates**: Changes in CMS reflect in the application without redeployment
+- **Allowed Sources**: Only approved news sources are displayed
+- **Topic Definitions**: Topics are automatically assigned based on keyword matching
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Backend & CMS
+- **Sanity.io** - Headless CMS for configuration management
+- **News API** - News data source
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Development Tools
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+- **date-fns** - Date manipulation
+
+## 📁 Project Structure
+```
+news-aggregator/
+├── src/
+│   ├── components/          # React components
+│   │   ├── ui/             # shadcn/ui components
+│   │   ├── NewsCard.tsx    # Article card component
+│   │   └── NewsFilters.tsx # Filter controls
+│   ├── hooks/              # Custom React hooks
+│   │   ├── useCMSConfig.ts # Fetch CMS configuration
+│   │   └── useNews.ts      # Fetch and filter news
+│   ├── lib/                # External service clients
+│   │   ├── newsApi.ts      # News API client
+│   │   └── sanityClient.ts # Sanity CMS client
+│   ├── pages/              # Page components
+│   │   └── HomePage.tsx    # Main news page
+│   ├── types/              # TypeScript type definitions
+│   │   └── index.ts
+│   └── utils/              # Utility functions
+│       └── topicMatcher.ts # Topic matching logic
+├── sanity-studio/          # Sanity CMS configuration
+│   ├── schemaTypes/        # CMS schema definitions
+│   │   ├── allowedSourceType.ts
+│   │   └── topicType.ts
+│   └── sanity.config.ts
+└── package.json
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+**Test CMS Integration**
+   - Add new source in Sanity Studio
+   - Refresh app to see it appear in filters
+   - Add new topic with keywords
+   - Verify articles get tagged correctly
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🐛 Known Limitations
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- **News API**: Free tier only works on localhost. Production uses mock data.
+- **Rate Limits**: News API free tier has 100 requests/day limit
+- **Date Range**: News API free tier only returns articles from last 30 days
+
+
+
+
+**Note**: This is a test project demonstrating frontend development skills including React, TypeScript, API integration, and CMS usage.
