@@ -15,7 +15,8 @@ export const useNews = (filters: NewsFilters) => {
 
       //News API request
       const response = await newsApi.getAll({
-        sources: filters.source || sources,
+        // sources: filters.source || sources,
+        sources: sources,
         pageSize: 50,
         sortBy: 'publishedAt',
       })
@@ -27,6 +28,12 @@ export const useNews = (filters: NewsFilters) => {
         (article) =>
           article.source.id && allowedSourceIds.includes(article.source.id)
       )
+
+      if (filters.source) {
+        filteredArticles = filteredArticles.filter(
+          (article) => article.source.id === filters.source
+        )
+      }
 
       // Filtering by keyword in Title
       if (filters.keyword && filters.keyword.trim()) {
